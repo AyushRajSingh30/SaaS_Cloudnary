@@ -68,14 +68,14 @@ function Page() {
                 type="text"
                 value={object}
                 onChange={(e) => SetObject(e.target.value)}
-                placeholder="Primary Colour"
+                placeholder="Object"
                 className="input input-bordered w-full"
               />
               <input
                 type="text"
                 value={Recolour}
                 onChange={(e) => SetRecolour(e.target.value)}
-                placeholder="Secondary Colour"
+                placeholder="Colour"
                 className="input input-bordered w-full"
               />
             </div>
