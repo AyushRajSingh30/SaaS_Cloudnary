@@ -87,7 +87,6 @@ function Page() {
               src={uploadedImage}
               sizes="100vw"
               alt="Transformed image"
-              crop="fill"
               removeBackground
             />
           ) : (
