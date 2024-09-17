@@ -11,6 +11,7 @@ import {
   Share2Icon,
   UploadIcon,
   ImageIcon,
+  UserIcon,
 } from "lucide-react";
 
 const sidebarItems = [
@@ -30,12 +31,19 @@ export default function AppLayout({
   const { signOut } = useClerk();
   const { user } = useUser();
 
+  // console.log("User: ", user);
+
   const handleLogoClick = () => {
     router.push("/");
   };
 
   const handleSignOut = async () => {
     await signOut();
+    router.push("/sign-in");
+  };
+
+  const userProfile = () => {
+    router.push("/user-profile");
   };
 
   return (
@@ -69,18 +77,19 @@ export default function AppLayout({
             <div className="flex-none flex items-center space-x-4">
               {user && (
                 <>
-                  <div className="avatar">
+                  <div className="avatar online">
                     <div className="w-8 h-8 rounded-full">
                       <img
                         src={user.imageUrl}
                         alt={
-                          user.username || user.emailAddresses[0].emailAddress
+                          user?.firstName || user.emailAddresses[0].emailAddress
                         }
+                        onClick={userProfile}
                       />
                     </div>
                   </div>
                   <span className="text-sm truncate max-w-xs lg:max-w-md">
-                    {user.username || user.emailAddresses[0].emailAddress}
+                    {user?.firstName || user.emailAddresses[0].emailAddress}
                   </span>
                   <button
                     onClick={handleSignOut}
