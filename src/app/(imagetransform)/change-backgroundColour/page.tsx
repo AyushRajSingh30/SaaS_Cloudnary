@@ -99,6 +99,7 @@ function Page() {
               sizes="100vw"
               alt="Transformed image"
               crop="fill"
+              removeBackground
              background={colour}
             />
           ) : (
