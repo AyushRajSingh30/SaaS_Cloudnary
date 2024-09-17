@@ -12,6 +12,7 @@ import {
   UploadIcon,
   ImageIcon,
   UserIcon,
+  Images,
 } from "lucide-react";
 
 const sidebarItems = [
@@ -135,6 +136,13 @@ export default function AppLayout({
           </ul>
           {user && (
             <div className="p-4">
+              <button
+                onClick={() => router.push("/image-recolour")}
+                className="btn btn-outline btn-error w-full"
+              >
+                Image Transform
+              </button>
+
               <button
                 onClick={handleSignOut}
                 className="btn btn-outline btn-error w-full"
