@@ -26,12 +26,14 @@ function Page() {
 
       const Data = response.data;
       setUpload(Data.publicId);
-
       const Array = [object, Recolour];
       setArr(Array);
     } catch (error) {
       console.log(error);
       alert("Failed to upload image");
+    } finally{
+        console.log("Array: ", Array);
+        console.log("arr: ", arr);
     }
   };
 
