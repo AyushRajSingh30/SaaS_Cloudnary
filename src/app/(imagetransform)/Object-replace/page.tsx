@@ -45,7 +45,7 @@ function Page() {
       <div className="card bg-base-300 shadow-xl rounded-lg h-auto p-6 w-full lg:w-1/3">
         <div className="container mx-auto p-4 text-center">
           <h1 className="text-3xl font-bold mb-6 text-primary">
-            Object Replace
+            Image Object Replace
           </h1>
           <form onSubmit={handleSubmit} className="space-y-6">
             <div>
