@@ -5,21 +5,24 @@ import React, { useState } from "react";
 
 function Page() {
   const [file, setFile] = useState<File | null>(null);
-  const [uploadedImage, setUpload] = useState("");
-  const [object, SetObject] = useState("");
-  const [Recolour, SetRecolour] = useState("");
+  const [uploadedImage, setUpload] = useState<string>("");
+  const [object, SetObject] = useState<string>("");
+  const [Recolour, SetRecolour] = useState<string>("");
   const [arr, setArr] = useState<string[]>([]);
+  const [uploading, setUploading] = useState<boolean>(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setUploading(true);
     if (!file) {
       alert("Please upload an image");
+      setUploading(false);
       return;
     }
     try {
       const formData = new FormData();
       formData.append("file", file);
-      
+
       const response = await axios.post("/api/image-upload", formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
@@ -30,10 +33,9 @@ function Page() {
       setArr(Array);
     } catch (error) {
       console.log(error);
-      alert("Failed to upload image");
-    } finally{
-        console.log("Array: ", Array);
-        console.log("arr: ", arr);
+      alert("Image uploading Failed try again..");
+    } finally {
+      setUploading(false);
     }
   };
 
@@ -52,7 +54,9 @@ function Page() {
               </label>
               <input
                 type="file"
-                onChange={(e) => setFile(e.target.files ? e.target.files[0] : null)}
+                onChange={(e) =>
+                  setFile(e.target.files ? e.target.files[0] : null)
+                }
                 className="file-input file-input-bordered file-input-primary w-full"
               />
             </div>
@@ -75,7 +79,11 @@ function Page() {
                 className="input input-bordered w-full"
               />
             </div>
-            <button type="submit" className="btn btn-primary w-full">
+            <button
+              type="submit"
+              className="btn btn-primary w-full"
+              disabled={uploading}
+            >
               Apply Recolour
             </button>
           </form>
@@ -91,7 +99,11 @@ function Page() {
       <div className="card bg-base-300 shadow-xl rounded-lg h-auto p-6 w-full lg:w-2/3 flex items-center justify-center">
         <div className="text-center">
           <h2 className="text-2xl font-bold text-primary mb-4">Preview:</h2>
-          {uploadedImage ? (
+          {uploading ? (
+            <div className="mt-4">
+              <progress className="progress progress-primary w-full"></progress>
+            </div>
+          ) : uploadedImage ? (
             <CldImage
               width="960"
               height="600"
