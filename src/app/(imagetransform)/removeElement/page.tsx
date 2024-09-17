@@ -6,12 +6,13 @@ import React, { useState } from "react";
 function Page() {
   const [file, setFile] = useState<File | null>(null);
   const [uploadedImage, setUpload] = useState<string>("");
-  const [colour, setColour]=useState("black");
+  const [object, setObject]=useState("");
   const [uploading, setUploading] = useState<boolean>(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setUploading(true);
+    console.log(typeof object);
     if (!file) {
       alert("Please upload an image");
       setUploading(false);
@@ -40,7 +41,7 @@ function Page() {
       <div className="card bg-base-300 shadow-xl rounded-lg h-auto p-6 w-full lg:w-1/3">
         <div className="container mx-auto p-4 text-center">
           <h1 className="text-3xl font-bold mb-6 text-primary">
-            Change Background colour
+            Remove object from image
           </h1>
           <form onSubmit={handleSubmit} className="space-y-6">
             <div>
@@ -57,12 +58,12 @@ function Page() {
             </div>
             <div className="space-y-2">
               <label className="label">
-                <span className="label-text text-lg">Change colour</span>
+                <span className="label-text text-lg">Remove Object</span>
               </label>
               <input
                 type="text"
-                value={colour}
-                onChange={(e) => setColour(e.target.value)}
+                value={object}
+                onChange={(e) => setObject(e.target.value)}
                 placeholder="Object"
                 className="input input-bordered w-full"
               />
@@ -72,7 +73,7 @@ function Page() {
               className="btn btn-primary w-full"
               disabled={uploading}
             >
-              Apply Recolour
+              Remove
             </button>
           </form>
         </div>
@@ -99,8 +100,7 @@ function Page() {
               sizes="100vw"
               alt="Transformed image"
               crop="fill"
-              removeBackground
-             background={colour}
+              remove={object}
             />
           ) : (
             <p className="text-gray-500">No image uploaded yet.</p>

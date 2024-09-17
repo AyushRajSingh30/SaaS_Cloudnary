@@ -48,7 +48,7 @@ export async function POST(request: NextRequest) {
         );
         // End the stream with the buffer
         uplodeStream.end(buffer);
-        console.log(uplodeStream);
+        // console.log(uplodeStream);
       }
     );
     return NextResponse.json({ publicId: result.public_id }, { status: 200 });
