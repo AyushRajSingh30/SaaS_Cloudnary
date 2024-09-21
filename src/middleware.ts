@@ -6,6 +6,27 @@ const isPublicRoute = createRouteMatcher([
   "/sign-up",
   "/",
   "/home",
+  "/blur-image",
+  "/change-backgroundColour",
+  '/Extract-Object_fromImage',
+  '/image-recolour',
+  '/Object-replace',
+  '/remove-background',
+  '/removeElement',
+  '/Restore_Image',
+  
+]);
+
+const isFreePublicRoute= createRouteMatcher([
+  "/home",
+  "/blur-image",
+  "/change-backgroundColour",
+  '/Extract-Object_fromImage',
+  '/image-recolour',
+  '/Object-replace',
+  '/remove-background',
+  '/removeElement',
+  '/Restore_Image',
 ]);
 
 const isPublicApiRoute = createRouteMatcher(["/api/video"]);
@@ -27,7 +48,7 @@ export default clerkMiddleware((auth, req) => {
   //  console.log("UserId:", userId);
 
   //If User login
-  if (userId && isPublicRoute(req) && !isAccessingDashboard) {
+  if (userId && isPublicRoute(req) && !isFreePublicRoute(req)) {
     return NextResponse.redirect(new URL("/home", req.url));
   }
 

@@ -13,6 +13,7 @@ import {
   ImageIcon,
   UserIcon,
   Images,
+  LogIn,
 } from "lucide-react";
 
 const sidebarItems = [
@@ -35,7 +36,7 @@ export default function AppLayout({
   // console.log("User: ", user);
 
   const handleLogoClick = () => {
-    router.push("/");
+    router.push("/home");
   };
 
   const handleSignOut = async () => {
@@ -76,7 +77,7 @@ export default function AppLayout({
               </Link>
             </div>
             <div className="flex-none flex items-center space-x-4">
-              {user && (
+              {user ? (
                 <>
                   <div className="avatar online">
                     <div className="w-8 h-8 rounded-full">
@@ -99,6 +100,14 @@ export default function AppLayout({
                     <LogOutIcon className="h-6 w-6" />
                   </button>
                 </>
+              ) : (
+                <button
+                  onClick={() => router.push("/sign-in")}
+                  className="btn btn-ghost btn-circle "
+                >
+                  <LogIn className="h-6 w-6" />
+                  LogIn
+                </button>
               )}
             </div>
           </div>
@@ -134,15 +143,16 @@ export default function AppLayout({
               </li>
             ))}
           </ul>
+          <div className="p-4">
+            <button
+              onClick={() => router.push("/image-recolour")}
+              className="btn btn-outline btn-error w-full"
+            >
+              Image Transform
+            </button>
+          </div>
           {user && (
             <div className="p-4">
-              <button
-                onClick={() => router.push("/image-recolour")}
-                className="btn btn-outline btn-error w-full"
-              >
-                Image Transform
-              </button>
-
               <button
                 onClick={handleSignOut}
                 className="btn btn-outline btn-error w-full"

@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useClerk, useUser } from "@clerk/nextjs";
-import { LogOutIcon } from "lucide-react";
+import { LogOutIcon, LogInIcon } from "lucide-react";
 
 export default function AppLayout({
   children,
@@ -86,21 +86,33 @@ export default function AppLayout({
           </div>
 
           {/* User Profile and Logout */}
-          <div className="flex items-center space-x-4">
-            <div className="avatar">
-              <div className="w-10 rounded-full online">
-                <img
-                  src={user?.imageUrl}
-                  alt={user?.firstName || user?.emailAddresses[0]?.emailAddress}
-                  onClick={userProfile}
-                  className="cursor-pointer"
-                />
+          {user ? (
+            <div className="flex items-center space-x-4">
+              <div className="avatar">
+                <div className="w-10 rounded-full online">
+                  <img
+                    src={user?.imageUrl}
+                    alt={
+                      user?.firstName || user?.emailAddresses[0]?.emailAddress
+                    }
+                    onClick={userProfile}
+                    className="cursor-pointer"
+                  />
+                </div>
               </div>
+              <button onClick={handleSignOut} className="btn btn-ghost">
+                <LogOutIcon className="h-6 w-6" />
+              </button>
             </div>
-            <button onClick={handleSignOut} className="btn btn-ghost">
-              <LogOutIcon className="h-6 w-6" />
+          ) : (
+            <button
+              onClick={() => router.push("/sign-in")}
+              className="btn btn-ghost"
+            >
+              <LogInIcon className="h-6 w-6" />
+              LogIn
             </button>
-          </div>
+          )}
         </div>
         {/* Page content */}
         <main className="flex-grow">
