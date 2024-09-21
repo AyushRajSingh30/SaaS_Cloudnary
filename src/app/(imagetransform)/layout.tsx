@@ -54,8 +54,7 @@ export default function AppLayout({
             <Link href={"/video-upload"} className="btn btn-ghost">
               Video Upload
             </Link>
-            <details className="dropdown dropdown-hover relative z-10">
-              <summary className="btn btn-ghost">Image-Transform</summary>
+            <details className="dropdown dropdown-hover relative z-10" >
               <ul className="dropdown-content p-2 shadow bg-gray-800 rounded-box">
                 <li className="hover:bg-gray-700">
                   <Link href={"/image-recolour"}>Image Recolour</Link>
