@@ -42,4 +42,4 @@ jobs:
         script: |
           cd /home/ubuntu/my-app
           npm install
-          pm2 restart my-app || pm2 start index.js --name my-app
+          pm2 restart my-app || pm2 start "npm run start" --name my-app
