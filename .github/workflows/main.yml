@@ -1,36 +1,44 @@
-name: Deploy Next.js to S3
+name: Deploy Next.js to S3  # Workflow name
 
+# Trigger: Run this workflow when code is pushed to main branch
 on:
   push:
     branches:
-      - main   # run only when pushing to main branch
+      - main
 
 jobs:
   deploy:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-latest   # OS/machine to run the job
 
     steps:
+      # Step 1: Checkout your repository code
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v3   # Prebuilt GitHub Action to get your repo
 
+      # Step 2: Setup Node.js environment
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: 18
+          node-version: 18   # Specify Node.js version
 
+      # Step 3: Install project dependencies
       - name: Install dependencies
-        run: npm install
+        run: npm install   # Run shell command in runner
 
+      # Step 4: Build the Next.js project
       - name: Build Next.js project
-        run: npm run build && npm run export   # export static files to "out" folder
+        run: npm run build && npm run export
+        # npm run build → compiles project
+        # npm run export → exports static files to "out" folder
 
+      # Step 5: Deploy exported files to AWS S3
       - name: Deploy to S3
-        uses: jakejarvis/s3-sync-action@master
+        uses: jakejarvis/s3-sync-action@master   # Prebuilt S3 deploy action
         with:
-          args: --delete
+          args: --delete   # Delete files in S3 that are not in the source
         env:
-          AWS_S3_BUCKET: ${{ secrets.AWS_S3_BUCKET }}
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          AWS_REGION: ap-south-1  # change if needed
-          SOURCE_DIR: out
+          AWS_S3_BUCKET: ${{ secrets.AWS_S3_BUCKET }}          # S3 bucket name (stored as secret)
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}  # AWS Access Key (secret)
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}  # AWS Secret Key (secret)
+          AWS_REGION: ap-south-1      # AWS region
+          SOURCE_DIR: out             # Local folder to sync with S3
