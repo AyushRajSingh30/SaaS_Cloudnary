@@ -9,23 +9,37 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      # 1. Checkout source code
       - name: Checkout code
         uses: actions/checkout@v4
 
+      # 2. Setup Node.js
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 18
+          cache: 'npm'
 
+      # 3. Install dependencies
       - name: Install dependencies
-        run: npm ci
+        run: npm install
 
+      # 4. Generate Prisma client
+      - name: Prisma Generate
+        run: npx prisma generate
+
+      # 5. Build Next.js application
       - name: Build Next.js app
         run: npm run build
 
+      # 6. Zip entire project for deployment
+      - name: Prepare package for Azure
+        run: zip -r release.zip . -x "*.git*"
+
+      # 7. Deploy to Azure Web App
       - name: Deploy to Azure Web App
         uses: azure/webapps-deploy@v2
         with:
-          app-name: SaasCloudnary         # your app name
+          app-name: "SaasCloudnary"
           publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
-          package: .
+          package: release.zip
