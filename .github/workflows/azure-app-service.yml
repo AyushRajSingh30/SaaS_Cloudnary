@@ -8,13 +8,11 @@ on:
   workflow_dispatch:
 
 jobs:
-  # ==========================================
-  # JOB 1: Build the application
-  # ==========================================
-  build:
+  build-and-deploy:
     runs-on: ubuntu-latest
     permissions:
-      contents: read
+      id-token: write # Required for requesting the JWT token (OIDC) to authenticate securely with Azure
+      contents: read # Required for actions/checkout to read the repository content
 
     steps:
       # 1. Checkout source code
@@ -25,8 +23,8 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 18
-          cache: 'npm'
+          node-version: 22
+          cache: "npm"
 
       # 3. Install dependencies
       - name: Install dependencies
@@ -41,48 +39,21 @@ jobs:
       - name: Build Next.js app
         run: npm run build
 
-      # 6. Upload built artifacts
-      # We upload the entire workspace (including .next, node_modules, and prisma client) 
-      # so the deployment job can access them.
-      - name: Upload build artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: nextjs-app
-          path: .
-          retention-days: 1 # Delete the temp build artifact after 1 day to save storage
-
-  # ==========================================
-  # JOB 2: Deploy to Azure App Service
-  # ==========================================
-  deploy:
-    runs-on: ubuntu-latest
-    needs: build # Tells GitHub Actions to wait for the 'build' job to succeed first
-    permissions:
-      id-token: write # Required for requesting the JWT token (OIDC) to authenticate securely with Azure
-      contents: read  # Required for actions/checkout to read repository content
-
-    steps:
-      # 1. Download the build artifact
-      # This fetches the built files uploaded by the 'build' job and places them in the current directory
-      - name: Download build artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: nextjs-app
-          path: .
-
-      # 2. Login to Azure using OIDC (OpenID Connect)
+      # 6. Login to Azure using OIDC (OpenID Connect)
+      # This is the modern, passwordless way to log in without storing long-lived secret credentials
       - name: Login to Azure
         uses: azure/login@v2
         with:
           client-id: ${{ secrets.AZURE_CLIENT_ID }}
           tenant-id: ${{ secrets.AZURE_TENANT_ID }}
           subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+          client-secret: ${{ secrets.AZURE_CLIENT_SECRET }}
 
-      # 3. Deploy to Azure Web App
+      # 7. Deploy to Azure Web App
       - name: Deploy to Azure Web App
         id: deploy-to-webapp
         uses: azure/webapps-deploy@v3
         with:
-          app-name: 'b2bagent'
-          slot-name: 'Production'
-          package: . # Deploys the downloaded built files
+          app-name: "b2bagent"
+          slot-name: "Production"
+          package: . # Deploys the built workspace (includes .next, node_modules, package.json, etc.)
