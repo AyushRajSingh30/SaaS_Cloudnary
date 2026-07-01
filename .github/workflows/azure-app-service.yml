@@ -54,6 +54,6 @@ jobs:
         id: deploy-to-webapp
         uses: azure/webapps-deploy@v3
         with:
-          app-name: "b2bagent"
+          app-name: "Saas-Cloudnary"
           slot-name: "Production"
           package: . # Deploys the built workspace (includes .next, node_modules, package.json, etc.)
