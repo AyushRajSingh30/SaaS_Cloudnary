@@ -3,7 +3,6 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { useClerk, useUser } from "@clerk/nextjs";
 import {
   LogOutIcon,
   MenuIcon,
@@ -30,10 +29,16 @@ export default function AppLayout({
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const pathname = usePathname();
   const router = useRouter();
-  const { signOut } = useClerk();
-  const { user } = useUser();
-
-  // console.log("User: ", user);
+  
+  // Mocked Auth for disabled auth mode
+  const signOut = async () => {
+    router.push("/");
+  };
+  const user = {
+    imageUrl: "https://api.dicebear.com/7.x/adventurer/svg?seed=Guest",
+    firstName: "Guest",
+    emailAddresses: [{ emailAddress: "guest@example.com" }]
+  };
 
   const handleLogoClick = () => {
     router.push("/home");

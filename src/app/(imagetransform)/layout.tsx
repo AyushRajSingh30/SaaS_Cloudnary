@@ -3,7 +3,6 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { useClerk, useUser } from "@clerk/nextjs";
 import { LogOutIcon, LogInIcon } from "lucide-react";
 
 export default function AppLayout({
@@ -13,8 +12,14 @@ export default function AppLayout({
 }>) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const router = useRouter();
-  const { signOut } = useClerk();
-  const { user } = useUser();
+
+  // Mocked Auth for disabled auth mode
+  const signOut = async () => {};
+  const user = {
+    imageUrl: "https://api.dicebear.com/7.x/adventurer/svg?seed=Guest",
+    firstName: "Guest",
+    emailAddresses: [{ emailAddress: "guest@example.com" }]
+  };
 
   const handleLogoClick = () => {
     router.push("/");
@@ -22,7 +27,7 @@ export default function AppLayout({
 
   const handleSignOut = async () => {
     await signOut();
-    router.push("/sign-in");
+    router.push("/");
   };
 
   const userProfile = () => {

@@ -1,6 +1,6 @@
 import { v2 as cloudinary } from "cloudinary";
 import { NextRequest, NextResponse } from "next/server";
-import { auth } from "@clerk/nextjs/server";
+// import { auth } from "@clerk/nextjs/server";
 import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
@@ -20,11 +20,11 @@ interface CloudinaryUplodResult {
 }
 
 export async function POST(request: NextRequest) {
-  //Cheak User login or not
-  const { userId } = auth();
-  if (!userId) {
-    return NextResponse.json({ error: "unauthorization" }, { status: 400 });
-  }
+  // Check User login or not (Bypassed)
+  // const { userId } = auth();
+  // if (!userId) {
+  //   return NextResponse.json({ error: "unauthorization" }, { status: 400 });
+  // }
 
   try {
     const formData = await request.formData();
